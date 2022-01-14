@@ -1,9 +1,12 @@
 
 import { calculateDiscountTwoProductsWithPurchasesgreaterThan100k } from '../../src/BusinessLogic/discounts';
+import { generateInvoiceFromOrder } from '../../src/BusinessLogic/invoice-process';
 import { orderMockOneProduct, 
         orderMockTwoProductsGreaterThan100k, 
         orderMockTwoProductsGreaterThan100kDiffSort,
-        orderMockTwoProductsLessOrEqualThan100k } from '../mocks/order.mock';
+        orderMockTwoProductsLessOrEqualThan100k,
+        orderMockOneProductPurchased10Times
+     } from '../mocks/order.mock';
 
 import { expect } from 'chai';
 
@@ -29,4 +32,11 @@ describe('Discount cheapest product', () => { // the tests container
         expect(actualResult).to.equal(19000);
     });
 
+});
+
+describe('Anti-hoarders purchases tests', () => {
+    it('Not allow to purchase 10 equal products in a single transaction', () => {
+        const invoiceProcessStatus = generateInvoiceFromOrder(orderMockOneProductPurchased10Times);
+        expect(invoiceProcessStatus).to.equal(false);
+    });
 });
